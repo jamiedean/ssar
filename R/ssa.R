@@ -195,7 +195,7 @@ ssa <- function(xinit, pfun, v, params = c(), tmin = 0, tmax = Inf, nsim = 10,
                  maxiter = Inf, maxtime = Inf, print.time = FALSE,
                  plot.sim = TRUE, title = "", xlab = "", ylab = "",
                  kthsave = 1, keep.file = FALSE, file.only = FALSE,
-                 fname = "Temporary_File_ssa.txt"){
+                 fname = NULL){
 
   #-----------------------------------------
   #PREPARATION: HERE WE CHECK PARAMETERS MAKE SENSE
@@ -290,10 +290,11 @@ ssa <- function(xinit, pfun, v, params = c(), tmin = 0, tmax = Inf, nsim = 10,
   #-----------------------------------------
   #SIMULATION USING C++ PROGRAM (RCPP)
   #-----------------------------------------
-
+  tmpfile <- tempfile(pattern = "tmp_", tmpdir = getwd(), fileext = ".txt")
+  
   #Run C program to estimate the loop
   ssa_loop(xinit, .pfun, v, params, tmin, nsim, .lfun,
-            tmax, maxiter, maxtime,  print.time, .opts_check, kthsave)
+            tmax, maxiter, maxtime,  print.time, .opts_check, kthsave, tmpfile)
 
   #-----------------------------------------
   #R AFTERMATH
@@ -303,7 +304,7 @@ ssa <- function(xinit, pfun, v, params = c(), tmin = 0, tmax = Inf, nsim = 10,
   if (!file.only){  
   
     #Try to open file which is in current directory
-    .filename  <- "Temporary_File_ssa.txt"
+    .filename  <- tmpfile
     .datamodel <- as.data.frame(read.table(.filename, header = T))
     
     #Change colnames (this is to ensure no errors while running check)
@@ -316,14 +317,21 @@ ssa <- function(xinit, pfun, v, params = c(), tmin = 0, tmax = Inf, nsim = 10,
   if (!keep.file){
     
     try({
-      file.remove("Temporary_File_ssa.txt")
+      file.remove(tmpfile)
     })
     
   } else {
-    
-    try({
-      file.rename("Temporary_File_ssa.txt", fname)
-    })
+    if(is.null(fname))
+    {
+      try({
+        file.rename(tmpfile, tmpfile)
+      })
+    }
+    else{
+      try({
+        file.rename(tmpfile, fname)
+      })
+    }
   }
 
   #-----------------------------------------

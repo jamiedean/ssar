@@ -149,7 +149,8 @@ NumericMatrix MatVecHadamard(NumericMatrix X, NumericVector y,  int nrowX,  int 
 
 // [[Rcpp::export]]
 void ssa_loop (NumericVector X, Function pfun, NumericMatrix v, NumericVector params, double tmin,
-                         int nsim, int lfun, double tmax, double maxiter, double maxtime, bool printtime, bool optscheck, int kthsave){
+                         int nsim, int lfun, double tmax, double maxiter, double maxtime, bool printtime, bool optscheck, int kthsave,
+                         std::string filename){
   
   //----------------------------------------------------------------
   //INICIALIZE VARIABLES
@@ -188,7 +189,7 @@ void ssa_loop (NumericVector X, Function pfun, NumericMatrix v, NumericVector pa
   //Write file
   //----------------------------------------------------------------
   std::ofstream myfile;
-  myfile.open ("Temporary_File_ssa.txt");
+  myfile.open (filename);
   
   //Create header of file
   std::string headerfile = "Simulation Iteration Time";
