@@ -201,13 +201,17 @@ ssa <- function(xinit, pfun, v, params = c(), tmin = 0, tmax = Inf, nsim = 10,
   #PREPARATION: HERE WE CHECK PARAMETERS MAKE SENSE
   #----------------------------------------
 
+  # Change minimum number of simulations from 2 to 1
+  
   #Check that nsim is integer and positive
-  if ( (nsim != ceiling(nsim) & nsim != floor(nsim)) || nsim <= 1){
-    warning(paste("nsim is not a strictly positive integer.",
-                  "Defaulting to closest positive integer"))
-    nsim   <- max( ceiling(nsim), 2)
-  }
+  #if ( (nsim != ceiling(nsim) & nsim != floor(nsim)) || nsim <= 1){
+  #  warning(paste("nsim is not a strictly positive integer.",
+  #                "Defaulting to closest positive integer"))
+  #  nsim   <- max( ceiling(nsim), 2)
+  #}
 
+  nsim <- ceiling(nsim)
+  
   #Check that kthsave is integer and positive
   if ( (kthsave != ceiling(kthsave) & kthsave != floor(kthsave))
        || kthsave < 1){

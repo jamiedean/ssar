@@ -250,7 +250,7 @@ void ssa_loop (NumericVector X, Function pfun, NumericMatrix v, NumericVector pa
       }
       
       //Check maxiter
-      if (indicator(1) > maxiter){
+      if (indicator(0) > maxiter){
         warnMaxiter(maxiter);
         break;
       }
@@ -276,7 +276,7 @@ void ssa_loop (NumericVector X, Function pfun, NumericMatrix v, NumericVector pa
     
     //Break if some value gets negative
     if (a0vals.second){
-      warnNegative(indicator(1));
+      warnNegative(indicator(0));
       break;
     }
     
@@ -300,7 +300,7 @@ void ssa_loop (NumericVector X, Function pfun, NumericMatrix v, NumericVector pa
     
     //To make sure we don't print all results (files might get too memory-intensive) 
     //We also want to make sure we print the last run
-    if ( ((indicator(1)-1) % kthsave) == 0 || *std::min_element(t.begin(), t.end()) >= tmax || indicator(1) == maxiter ){
+    if ( ((indicator(0)-1) % kthsave) == 0 || *std::min_element(t.begin(), t.end()) >= tmax || indicator(0) == maxiter ){
 
       Printable(_,1) = indicator; //Iteration number
       Printable(_,2) = t;         //Time
